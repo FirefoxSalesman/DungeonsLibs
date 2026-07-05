@@ -1,0 +1,85 @@
+package net.firefoxsalesman.dungeonslibs.capabilities;
+
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.CapabilityManager;
+import net.minecraftforge.common.capabilities.CapabilityToken;
+import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
+import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+import net.firefoxsalesman.dungeonslibs.capabilities.artifact.ArtifactUsage;
+import net.firefoxsalesman.dungeonslibs.capabilities.artifact.AttacherArtifactUsage;
+import net.firefoxsalesman.dungeonslibs.capabilities.builtinenchantments.AttacherBuiltInEnchantments;
+import net.firefoxsalesman.dungeonslibs.capabilities.builtinenchantments.BuiltInEnchantments;
+import net.firefoxsalesman.dungeonslibs.capabilities.elite.AttacherEliteMob;
+import net.firefoxsalesman.dungeonslibs.capabilities.elite.EliteMob;
+import net.firefoxsalesman.dungeonslibs.capabilities.enchantedprojectile.AttacherEnchantedProjectile;
+import net.firefoxsalesman.dungeonslibs.capabilities.enchantedprojectile.EnchantedProjectile;
+import net.firefoxsalesman.dungeonslibs.capabilities.minionmaster.AttacherFollower;
+import net.firefoxsalesman.dungeonslibs.capabilities.minionmaster.AttacherLeader;
+import net.firefoxsalesman.dungeonslibs.capabilities.minionmaster.Follower;
+import net.firefoxsalesman.dungeonslibs.capabilities.minionmaster.Leader;
+import net.firefoxsalesman.dungeonslibs.capabilities.playerrewards.AttacherPlayerRewards;
+import net.firefoxsalesman.dungeonslibs.capabilities.playerrewards.PlayerRewards;
+import net.firefoxsalesman.dungeonslibs.capabilities.soulcaster.AttacherSoulCaster;
+import net.firefoxsalesman.dungeonslibs.capabilities.soulcaster.SoulCaster;
+import net.firefoxsalesman.dungeonslibs.capabilities.timers.AttacherTimers;
+import net.firefoxsalesman.dungeonslibs.capabilities.timers.Timers;
+import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
+
+@Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+public class LibCapabilities {
+	public static final Capability<Timers> TIMERS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
+	public static final Capability<BuiltInEnchantments> BUILT_IN_ENCHANTMENTS_CAPABILITY = CapabilityManager
+			.get(new CapabilityToken<>() {
+			});
+	public static final Capability<ArtifactUsage> ARTIFACT_USAGE_CAPABILITY = CapabilityManager
+			.get(new CapabilityToken<>() {
+			});
+	public static final Capability<Follower> FOLLOWER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
+	public static final Capability<Leader> LEADER_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
+	public static final Capability<SoulCaster> SOUL_CASTER_CAPABILITY = CapabilityManager
+			.get(new CapabilityToken<>() {
+			});
+	public static final Capability<EnchantedProjectile> ENCHANTED_PROJECTILE_CAPABILITY = CapabilityManager
+			.get(new CapabilityToken<>() {
+			});
+	public static final Capability<PlayerRewards> PLAYER_REWARDS_CAPABILITY = CapabilityManager
+			.get(new CapabilityToken<>() {
+			});
+	public static final Capability<EliteMob> ELITE_MOB_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
+
+	public static void setupCapabilities() {
+		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+		forgeBus.addGenericListener(ItemStack.class, AttacherBuiltInEnchantments::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherTimers::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherArtifactUsage::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherLeader::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherFollower::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherSoulCaster::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherEnchantedProjectile::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherPlayerRewards::attach);
+		forgeBus.addGenericListener(Entity.class, AttacherEliteMob::attach);
+	}
+
+	@SubscribeEvent
+	public static void registerCaps(RegisterCapabilitiesEvent event) {
+		event.register(Timers.class);
+		event.register(Follower.class);
+		event.register(Leader.class);
+		event.register(SoulCaster.class);
+		event.register(EnchantedProjectile.class);
+		event.register(PlayerRewards.class);
+		event.register(BuiltInEnchantments.class);
+		event.register(ArtifactUsage.class);
+		event.register(EliteMob.class);
+	}
+}
