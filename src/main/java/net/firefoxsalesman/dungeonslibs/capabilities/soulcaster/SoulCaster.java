@@ -1,12 +1,13 @@
 package net.firefoxsalesman.dungeonslibs.capabilities.soulcaster;
 
 import com.Polarice3.Goety.utils.SEHelper;
+
+import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.util.INBTSerializable;
-import net.minecraftforge.fml.ModList;
 
 import javax.annotation.Nullable;
 
@@ -30,7 +31,7 @@ public class SoulCaster implements INBTSerializable<CompoundTag> {
 	}
 
 	public void addSouls(float amount, LivingEntity living) {
-		if (ModList.get().isLoaded("goety") && living instanceof Player) {
+		if (ModHelper.hasGoety() && living instanceof Player) {
 			SEHelper.increaseSouls((Player) living, (int) amount);
 		} else {
 			setSouls(this.getSouls() + amount, living);
@@ -38,7 +39,7 @@ public class SoulCaster implements INBTSerializable<CompoundTag> {
 	}
 
 	public void setSouls(float amount, @Nullable LivingEntity living) {
-		if (ModList.get().isLoaded("goety") && living instanceof Player) {
+		if (ModHelper.hasGoety() && living instanceof Player) {
 			// HACK If the player's totem is full, it will not change to any number besides
 			// 0. It's likely a skill issue on my part, but I don't know any other way to
 			// fix it.

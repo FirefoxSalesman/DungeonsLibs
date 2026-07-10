@@ -6,6 +6,7 @@ import static net.firefoxsalesman.dungeonslibs.attribute.AttributeRegistry.SOUL_
 import com.Polarice3.Goety.utils.SEHelper;
 import net.firefoxsalesman.dungeonslibs.items.interfaces.ISoulConsumer;
 import net.firefoxsalesman.dungeonslibs.network.UpdateSoulsMessage;
+import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
 import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -13,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.network.PacketDistributor;
 
 public class SoulCasterHelper {
@@ -71,7 +71,7 @@ public class SoulCasterHelper {
 	}
 
 	public static float getSouls(Entity le) {
-		if (ModList.get().isLoaded("goety") && le instanceof Player) {
+		if (ModHelper.hasGoety() && le instanceof Player) {
 			return (float) SEHelper.getSoulAmountInt((Player) le);
 		} else {
 			SoulCaster soulCasterCapability = getSoulCasterCapability(le);

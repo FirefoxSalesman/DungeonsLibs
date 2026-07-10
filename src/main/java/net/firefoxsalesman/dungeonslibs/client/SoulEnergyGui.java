@@ -4,6 +4,8 @@ import com.mojang.blaze3d.systems.RenderSystem;
 
 import net.firefoxsalesman.dungeonslibs.capabilities.soulcaster.SoulCasterHelper;
 import net.firefoxsalesman.dungeonslibs.config.DungeonsLibrariesConfig;
+import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
+
 import static net.firefoxsalesman.dungeonslibs.utils.ResourceLocationHelper.modLoc;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -11,7 +13,6 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.level.GameType;
 import net.minecraftforge.client.gui.overlay.ForgeGui;
 import net.minecraftforge.client.gui.overlay.IGuiOverlay;
-import net.minecraftforge.fml.ModList;
 
 /**
  * Borrowed from Goety. Many thanks to Polarice
@@ -23,7 +24,7 @@ public class SoulEnergyGui {
 	public static boolean shouldDisplayBar() {
 		return SoulCasterHelper.hasSouls(minecraft.player) && (minecraft.gameMode != null
 				&& minecraft.gameMode.getPlayerMode() != GameType.SPECTATOR)
-				&& !ModList.get().isLoaded("goety");
+				&& !ModHelper.hasGoety();
 	}
 
 	public static Font getFont() {

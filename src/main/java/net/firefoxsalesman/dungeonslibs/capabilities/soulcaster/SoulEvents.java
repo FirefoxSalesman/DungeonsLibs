@@ -5,12 +5,12 @@ import com.Polarice3.Goety.utils.SEHelper;
 
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.entities.SoulOrbEntity;
+import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 
 @Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID)
@@ -23,7 +23,7 @@ public class SoulEvents {
 		if (sourceEntity instanceof Player) {
 			double soulAmount = ((Player) sourceEntity).getAttributeValue(SOUL_GATHERING.get());
 			if (soulAmount > 0) {
-				if (ModList.get().isLoaded("goety")) {
+				if (ModHelper.hasGoety()) {
 					SEHelper.increaseSouls((Player) sourceEntity, (int) soulAmount);
 				} else {
 					entityLiving.level().addFreshEntity(new SoulOrbEntity((Player) sourceEntity,
