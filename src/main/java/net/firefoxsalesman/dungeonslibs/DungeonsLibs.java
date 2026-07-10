@@ -18,6 +18,7 @@ import net.firefoxsalesman.dungeonslibs.items.gearconfig.CrossbowGearConfigRegis
 import net.firefoxsalesman.dungeonslibs.items.gearconfig.MeleeGearConfigRegistry;
 import net.firefoxsalesman.dungeonslibs.items.materials.armor.DungeonsArmorMaterials;
 import net.firefoxsalesman.dungeonslibs.items.materials.weapon.WeaponMaterials;
+import net.firefoxsalesman.dungeonslibs.loot.ModLootModifiers;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -59,6 +60,8 @@ public class DungeonsLibs {
 		ArtifactGearConfigRegistry.subscribe();
 
 		LibCapabilities.setupCapabilities();
+
+		ModLootModifiers.register(modEventBus);
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
