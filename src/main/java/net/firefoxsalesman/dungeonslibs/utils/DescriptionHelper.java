@@ -115,7 +115,7 @@ public class DescriptionHelper {
 		if (itemStack.getItem() instanceof ArtifactItem) {
 
 			list.add(Component.translatable(
-					"artifact.dungeons_libraries.base")
+					"artifact.dungeonslibs.base")
 					.withStyle(ChatFormatting.DARK_AQUA));
 
 			ResourceLocation registryName = ForgeRegistries.ITEMS.getKey(itemStack.getItem());
@@ -129,12 +129,12 @@ public class DescriptionHelper {
 
 			if (durationInSeconds > 0) {
 				list.add(Component.translatable(
-						"artifact.dungeons_libraries.duration", durationInSeconds)
+						"artifact.dungeonslibs.duration", durationInSeconds)
 						.withStyle(ChatFormatting.BLUE));
 			}
 			if (cooldownInSeconds > 0) {
 				list.add(Component.translatable(
-						"artifact.dungeons_libraries.cooldown", cooldownInSeconds)
+						"artifact.dungeonslibs.cooldown", cooldownInSeconds)
 						.withStyle(ChatFormatting.BLUE));
 			}
 		}

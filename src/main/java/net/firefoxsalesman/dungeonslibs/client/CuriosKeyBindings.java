@@ -25,14 +25,14 @@ import java.util.Optional;
 public class CuriosKeyBindings {
 
 	public static final KeyMapping activateArtifact1 = new KeyMapping(
-			"key.dungeons_libraries.curiosintegration.description_slot1", GLFW.GLFW_KEY_V,
-			"key.dungeons_libraries.curiosintegration.category");
+			"key.dungeonslibs.curiosintegration.description_slot1", GLFW.GLFW_KEY_V,
+			"key.dungeonslibs.curiosintegration.category");
 	public static final KeyMapping activateArtifact2 = new KeyMapping(
-			"key.dungeons_libraries.curiosintegration.description_slot2", GLFW.GLFW_KEY_B,
-			"key.dungeons_libraries.curiosintegration.category");
+			"key.dungeonslibs.curiosintegration.description_slot2", GLFW.GLFW_KEY_B,
+			"key.dungeonslibs.curiosintegration.category");
 	public static final KeyMapping activateArtifact3 = new KeyMapping(
-			"key.dungeons_libraries.curiosintegration.description_slot3", GLFW.GLFW_KEY_N,
-			"key.dungeons_libraries.curiosintegration.category");
+			"key.dungeonslibs.curiosintegration.description_slot3", GLFW.GLFW_KEY_N,
+			"key.dungeonslibs.curiosintegration.category");
 
 	@SubscribeEvent
 	public static void onClientTick(InputEvent.Key event) {
