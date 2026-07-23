@@ -8,6 +8,7 @@ import net.firefoxsalesman.dungeonslibs.attribute.AttributeRegistry;
 import net.firefoxsalesman.dungeonslibs.capabilities.LibCapabilities;
 import net.firefoxsalesman.dungeonslibs.config.DungeonsLibrariesConfig;
 import net.firefoxsalesman.dungeonslibs.entities.LibEntityTypes;
+import net.firefoxsalesman.dungeonslibs.init.ParticleInit;
 import net.firefoxsalesman.dungeonslibs.items.ItemTagWrappers;
 import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.firefoxsalesman.dungeonslibs.items.RangedItemModelProperties;
@@ -62,6 +63,7 @@ public class DungeonsLibs {
 		LibCapabilities.setupCapabilities();
 
 		ModLootModifiers.register(modEventBus);
+		ParticleInit.register(modEventBus);
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {
