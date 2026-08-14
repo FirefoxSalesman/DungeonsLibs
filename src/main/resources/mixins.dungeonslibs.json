@@ -15,6 +15,7 @@
     "CrossbowItemInvoker",
     "CrossbowItemMixin",
     "EnchantmentHelperMixin",
+    "GeoEntityRendererMixin",
     "ItemAccessor",
     "ItemCooldownsAccessor",
     "LivingEntityAccessor",
