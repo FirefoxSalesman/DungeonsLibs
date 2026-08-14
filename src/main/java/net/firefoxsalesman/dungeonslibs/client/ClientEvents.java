@@ -1,10 +1,13 @@
 package net.firefoxsalesman.dungeonslibs.client;
 
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
 import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.client.artifactBar.ArtifactsBarRender;
+import net.firefoxsalesman.dungeonslibs.client.renderer.water.CustomDrownedRenderer;
+import net.minecraft.world.entity.EntityType;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.api.distmarker.Dist;
 
@@ -17,5 +20,10 @@ public class ClientEvents {
 	public static void registerGUI(final RegisterGuiOverlaysEvent event) {
 		event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "artifacts_bar", ArtifactsBarRender.OVERLAY);
 		event.registerAbove(VanillaGuiOverlay.HOTBAR.id(), "soul_energy_hud", SoulEnergyGui.OVERLAY);
+	}
+
+	@SubscribeEvent
+	public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+		event.registerEntityRenderer(EntityType.DROWNED, CustomDrownedRenderer::new);
 	}
 }
