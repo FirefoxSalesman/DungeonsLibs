@@ -2,10 +2,14 @@ package net.firefoxsalesman.dungeonslibs.client.artifactBar;
 
 import static net.firefoxsalesman.dungeonslibs.utils.ResourceLocationHelper.modLoc;
 
+import java.util.List;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 
+import net.firefoxsalesman.dungeonslibs.client.CuriosKeyBindings;
 import net.firefoxsalesman.dungeonslibs.config.DungeonsLibrariesConfig;
 import net.firefoxsalesman.dungeonslibs.items.artifacts.ArtifactItem;
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
@@ -50,11 +54,20 @@ public class ArtifactsBarRenderer {
 			return;
 		}
 
-		int i = (screenWidth / 2) - 200 + DungeonsLibrariesConfig.SOUL_BAR_HORIZONTAL_OFFSET.get();
-		int height = screenHeight - 5 + DungeonsLibrariesConfig.SOUL_BAR_VERTICAL_OFFSET.get();
+		int x = (screenWidth / 2) - 200 + DungeonsLibrariesConfig.SOUL_BAR_HORIZONTAL_OFFSET.get();
+		int y = screenHeight - 21 + DungeonsLibrariesConfig.SOUL_BAR_VERTICAL_OFFSET.get();
 
 		RenderSystem.setShaderTexture(0, ARTIFACT_BAR_RESOURCE);
-		guiGraphics.blit(ARTIFACT_BAR_RESOURCE, i, height - 16, 0,
+		// i & height - 16 are equivalent to the x & y found in the old renderer
+		guiGraphics.blit(ARTIFACT_BAR_RESOURCE, x, y, 0,
 				0, 62, 22, 62, 22);
+		int i = 0;
+		for (KeyMapping key : List.of(CuriosKeyBindings.activateArtifact1, CuriosKeyBindings.activateArtifact2,
+				CuriosKeyBindings.activateArtifact3)) {
+			String keyName = key.getKey().getDisplayName().getString();
+			guiGraphics.drawString(getFont(), keyName, x + 19 + (i * 20) - getFont().width(keyName), y + 3,
+					0xFFFFFF, true);
+			i++;
+		}
 	}
 }
