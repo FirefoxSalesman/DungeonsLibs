@@ -1,8 +1,8 @@
 package net.firefoxsalesman.dungeonslibs.integration.curios.client;
 
-import static net.firefoxsalesman.dungeonslibs.integration.curios.client.CuriosKeyBindings.activateArtifact1;
-import static net.firefoxsalesman.dungeonslibs.integration.curios.client.CuriosKeyBindings.activateArtifact2;
-import static net.firefoxsalesman.dungeonslibs.integration.curios.client.CuriosKeyBindings.activateArtifact3;
+import static net.firefoxsalesman.dungeonslibs.client.CuriosKeyBindings.activateArtifact1;
+import static net.firefoxsalesman.dungeonslibs.client.CuriosKeyBindings.activateArtifact2;
+import static net.firefoxsalesman.dungeonslibs.client.CuriosKeyBindings.activateArtifact3;
 
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.minecraftforge.api.distmarker.Dist;
