@@ -10,6 +10,8 @@ public class DungeonsLibrariesConfig {
 	public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_AREA_OF_EFFECT_ON_OTHER_PLAYERS;
 	public static ForgeConfigSpec.ConfigValue<Integer> SOUL_BAR_VERTICAL_OFFSET;
 	public static ForgeConfigSpec.ConfigValue<Integer> SOUL_BAR_HORIZONTAL_OFFSET;
+	public static ForgeConfigSpec.ConfigValue<Integer> ARTIFACT_BAR_VERTICAL_OFFSET;
+	public static ForgeConfigSpec.ConfigValue<Integer> ARTIFACT_BAR_HORIZONTAL_OFFSET;
 	public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_KEEP_SOULS_ON_DEATH;
 	public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_DUAL_WIELDING;
 	public static ForgeConfigSpec.ConfigValue<Boolean> ENABLE_TWO_HANDED_WEAPON;
@@ -67,6 +69,13 @@ public class DungeonsLibrariesConfig {
 
 			SOUL_BAR_VERTICAL_OFFSET = builder
 					.comment("Vertical offset of the soul bar. Negative values move the bar down. Positive values move the bar up.")
+					.define("soulBarVerticalOffset", 0);
+			ARTIFACT_BAR_HORIZONTAL_OFFSET = builder
+					.comment("Horizontal offset of the artifact bar. Negative values move the bar to the left. Positive values move the bar to the right.")
+					.define("soulBarHorizontalOffset", 0);
+
+			ARTIFACT_BAR_VERTICAL_OFFSET = builder
+					.comment("Vertical offset of the artifact bar. Negative values move the bar down. Positive values move the bar up.")
 					.define("soulBarVerticalOffset", 0);
 			builder.pop();
 

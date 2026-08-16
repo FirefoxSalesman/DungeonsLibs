@@ -39,7 +39,7 @@ public class SoulEnergyGui {
 
 		int soulEnergy = (int) SoulCasterHelper.getSouls(minecraft.player);
 		int soulEnergyTotal = (int) SoulCasterHelper.getSoulCap(minecraft.player);
-		int i = (screenWidth / 2) - 200 + DungeonsLibrariesConfig.SOUL_BAR_HORIZONTAL_OFFSET.get();
+		int i = (screenWidth / 2) + 125 + DungeonsLibrariesConfig.SOUL_BAR_HORIZONTAL_OFFSET.get();
 		int energylength = (int) (60 * (soulEnergy / (double) soulEnergyTotal));
 		int maxenergy = 71;
 
