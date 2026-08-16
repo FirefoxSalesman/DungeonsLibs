@@ -88,8 +88,10 @@ public class ArtifactsBarRenderer {
 					CuriosKeyBindings.activateArtifact2,
 					CuriosKeyBindings.activateArtifact3)) {
 				ItemStack artifact = stacks.getStackInSlot(i);
-				if (!artifact.isEmpty() && artifact.getItem() instanceof ArtifactItem)
+				if (!artifact.isEmpty() && artifact.getItem() instanceof ArtifactItem) {
 					guiGraphics.renderItem(artifact, x + (i * 20) + 3, y + 3);
+					guiGraphics.renderItemDecorations(getFont(), artifact, x + (i * 20) + 3, y + 3);
+				}
 				String keyName = key.getKey().getDisplayName().getString();
 				guiGraphics.drawString(getFont(), keyName, x + 19 + (i * 20) - getFont().width(keyName),
 						y + 3, 0xFFFFFF, true);
