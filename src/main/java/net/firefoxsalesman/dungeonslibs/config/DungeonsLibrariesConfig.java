@@ -72,11 +72,11 @@ public class DungeonsLibrariesConfig {
 					.define("soulBarVerticalOffset", 0);
 			ARTIFACT_BAR_HORIZONTAL_OFFSET = builder
 					.comment("Horizontal offset of the artifact bar. Negative values move the bar to the left. Positive values move the bar to the right.")
-					.define("soulBarHorizontalOffset", 0);
+					.define("artifactBarHorizontalOffset", 0);
 
 			ARTIFACT_BAR_VERTICAL_OFFSET = builder
 					.comment("Vertical offset of the artifact bar. Negative values move the bar down. Positive values move the bar up.")
-					.define("soulBarVerticalOffset", 0);
+					.define("artifactBarVerticalOffset", 0);
 			builder.pop();
 
 			builder.comment("Elite Mob Configuration").push("elite_mob_configuration");
