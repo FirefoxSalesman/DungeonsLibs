@@ -1,11 +1,10 @@
 package net.firefoxsalesman.dungeonslibs.capabilities.minionmaster;
 
+import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.utils.AbilityHelper;
 import net.minecraft.world.entity.*;
-import net.minecraft.world.entity.decoration.ArmorStand;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Level;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.LivingChangeTargetEvent;
@@ -23,45 +22,24 @@ import static net.firefoxsalesman.dungeonslibs.capabilities.minionmaster.Followe
 
 @Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID)
 public class FollowerEvents {
-
-	private static ArmorStand DUMMY_TARGET;
-
 	@SubscribeEvent
 	public static void onSetAttackTarget(LivingChangeTargetEvent event) {
-		LivingEntity attacker = event.getEntity();
-		Level level = attacker.level();
 		LivingEntity target = event.getNewTarget();
+		LivingEntity attacker = event.getEntity();
 		if (attacker instanceof Mob && target instanceof Mob) {
 			if (AbilityHelper.isAlly(attacker, target)) {
-				createDummyTarget(level);
-				if (attacker instanceof NeutralMob) {
-					((NeutralMob) attacker).setPersistentAngerTarget(null);
-					((NeutralMob) attacker).setRemainingPersistentAngerTime(0);
-				}
-				((Mob) attacker).setTarget(DUMMY_TARGET);
-				attacker.setLastHurtByMob(DUMMY_TARGET);
+				event.setCanceled(true);
 			}
 		}
 	}
 
-	private static void createDummyTarget(Level level) {
-		if (DUMMY_TARGET == null) {
-			DUMMY_TARGET = EntityType.ARMOR_STAND.create(level);
-			if (DUMMY_TARGET != null) {
-				DUMMY_TARGET.remove(Entity.RemovalReason.DISCARDED);
-			}
+	@SubscribeEvent
+	public static void onLivingDropsEvent(LivingDropsEvent event) {
+		Follower cap = getFollowerCapability(event.getEntity());
+		if (cap.isFollower()) {
+			event.setCanceled(true);
 		}
 	}
-
-	/*
-	 * @SubscribeEvent
-	 * public static void onLivingDropsEvent(LivingDropsEvent event) {
-	 * Follower cap = getFollowerCapability(event.getEntity());
-	 * if (cap.isFollower()) {
-	 * event.setCanceled(true);
-	 * }
-	 * }
-	 */
 
 	@SubscribeEvent
 	public static void onLivingEntityTick(LivingEvent.LivingTickEvent event) {
