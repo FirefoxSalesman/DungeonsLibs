@@ -53,8 +53,8 @@ public class BuiltInEnchantments implements INBTSerializable<CompoundTag> {
 	}
 
 	public boolean addBuiltInEnchantment(ResourceLocation source, EnchantmentInstance enchantmentInstance) {
-		enchantments.computeIfAbsent(source,
-				resourceLocation -> enchantments.put(resourceLocation, new ArrayList<>()));
+		if (enchantments.get(source) == null)
+			enchantments.put(source, new ArrayList<>());
 		enchantments.get(source).add(enchantmentInstance);
 		return true;
 	}
