@@ -36,10 +36,8 @@ public class DescriptionHelper {
 	// have all styles available.
 	@SubscribeEvent
 	public static void onItemTooltip(ItemTooltipEvent event) {
-		BuiltInEnchantments cap = BuiltInEnchantmentsHelper
-				.getBuiltInEnchantmentsCapability(event.getItemStack());
-		List<EnchantmentInstance> builtInEnchantments = cap
-				.getBuiltInEnchantments(GEAR_CONFIG_BUILTIN_RESOURCELOCATION);
+		List<EnchantmentInstance> builtInEnchantments = BuiltInEnchantmentsHelper
+				.getBuiltInEnchantments(event.getItemStack(), GEAR_CONFIG_BUILTIN_RESOURCELOCATION);
 		builtInEnchantments.forEach(enchantmentInstance -> {
 			event.getToolTip().add(enchantmentInstance.enchantment.getFullname(enchantmentInstance.level)
 					.copy().withStyle(Style.EMPTY.withColor(TextColor.parseColor("#FF8100"))));

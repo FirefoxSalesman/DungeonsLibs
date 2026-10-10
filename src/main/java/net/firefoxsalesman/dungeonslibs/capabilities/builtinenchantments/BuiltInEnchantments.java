@@ -1,5 +1,14 @@
 package net.firefoxsalesman.dungeonslibs.capabilities.builtinenchantments;
 
+import static net.firefoxsalesman.dungeonslibs.capabilities.LibCapabilities.BUILT_IN_ENCHANTMENTS_CAPABILITY;
+
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import com.google.common.collect.Lists;
 
 import net.firefoxsalesman.dungeonslibs.items.gearconfig.ArmorGear;
@@ -16,11 +25,6 @@ import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.EnchantmentInstance;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import java.util.*;
-import java.util.stream.Collectors;
-
-import static net.firefoxsalesman.dungeonslibs.capabilities.LibCapabilities.BUILT_IN_ENCHANTMENTS_CAPABILITY;
 
 public class BuiltInEnchantments implements INBTSerializable<CompoundTag> {
 	private final Map<ResourceLocation, List<EnchantmentInstance>> enchantments = new HashMap<>();

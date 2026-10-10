@@ -1,6 +1,5 @@
 package net.firefoxsalesman.dungeonslibs.capabilities.enchantedprojectile;
 
-import net.firefoxsalesman.dungeonslibs.capabilities.builtinenchantments.BuiltInEnchantments;
 import net.firefoxsalesman.dungeonslibs.capabilities.builtinenchantments.BuiltInEnchantmentsHelper;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -21,8 +20,8 @@ public class EnchantedProjectile {
 
 	public void setEnchantments(ItemStack itemStack) {
 		Map<Enchantment, Integer> itemStackEnchantmentInstance = EnchantmentHelper.getEnchantments(itemStack);
-		BuiltInEnchantments cap = BuiltInEnchantmentsHelper.getBuiltInEnchantmentsCapability(itemStack);
-		Map<Enchantment, Integer> builtInEnchantments = cap.getAllBuiltInEnchantmentInstances().stream()
+		Map<Enchantment, Integer> builtInEnchantments = BuiltInEnchantmentsHelper
+				.getAllBuiltInEnchantmentInstances(itemStack).stream()
 				.collect(Collectors.groupingBy(enchantmentData -> enchantmentData.enchantment,
 						Collectors.summingInt(value -> value.level)));
 		builtInEnchantments.forEach((enchantment, integer) -> itemStackEnchantmentInstance.compute(enchantment,
