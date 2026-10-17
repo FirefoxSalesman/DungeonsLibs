@@ -24,7 +24,7 @@ public class SoulEnergyGui {
 	public static boolean shouldDisplayBar() {
 		return SoulCasterHelper.hasSouls(minecraft.player) && (minecraft.gameMode != null
 				&& minecraft.gameMode.getPlayerMode() != GameType.SPECTATOR)
-				&& !ModHelper.hasGoety();
+				&& !ModHelper.GOETY.hasMod();
 	}
 
 	public static Font getFont() {

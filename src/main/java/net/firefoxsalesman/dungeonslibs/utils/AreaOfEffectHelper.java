@@ -1,7 +1,14 @@
 package net.firefoxsalesman.dungeonslibs.utils;
 
+import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
+import net.firefoxsalesman.dungeonslibs.init.ModDamageSources;
+import net.firefoxsalesman.dungeonslibs.init.ParticleInit;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
@@ -98,5 +105,33 @@ public class AreaOfEffectHelper {
 
 	public static Predicate<LivingEntity> getCanHealPredicate(LivingEntity healer) {
 		return (nearbyEntity) -> AbilityHelper.canHealEntity(healer, nearbyEntity);
+	}
+
+	public static void createVisualLightningBoltOnEntity(Entity target) {
+		Level world = target.getCommandSenderWorld();
+		LightningBolt lightningboltentity = EntityType.LIGHTNING_BOLT.create(world);
+		if (lightningboltentity != null) {
+			lightningboltentity.moveTo(target.getX(), target.getY(), target.getZ());
+			lightningboltentity.setVisualOnly(true);
+			world.addFreshEntity(lightningboltentity);
+		}
+	}
+
+	public static void electrify(LivingEntity attacker, LivingEntity victim, float damageAmount) {
+		createVisualLightningBoltOnEntity(victim);
+		DungeonsLibs.PROXY.spawnParticles(victim, ParticleInit.ELECTRIC_SHOCK.get());
+		victim.hurt(ModDamageSources.source(attacker.level(), ModDamageSources.ELECTRIC_SHOCK, attacker, null),
+				damageAmount);
+	}
+
+	public static void spawnCritCloud(LivingEntity attacker, LivingEntity victim, float radius) {
+		AreaEffectCloud areaeffectcloudentity = new AreaEffectCloud(victim.level(), victim.getX(),
+				victim.getY(),
+				victim.getZ());
+		areaeffectcloudentity.setOwner(attacker);
+		areaeffectcloudentity.setParticle(ParticleTypes.CRIT);
+		areaeffectcloudentity.setRadius(radius);
+		areaeffectcloudentity.setDuration(0);
+		attacker.level().addFreshEntity(areaeffectcloudentity);
 	}
 }

@@ -1,17 +1,25 @@
 package net.firefoxsalesman.dungeonslibs.init;
 
 import net.minecraftforge.client.event.EntityRenderersEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+
 import static net.minecraftforge.api.distmarker.Dist.CLIENT;
 
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
+import net.firefoxsalesman.dungeonslibs.client.gui.BossBarRenderer;
 import net.firefoxsalesman.dungeonslibs.client.renderer.SoulOrbRenderer;
 import net.firefoxsalesman.dungeonslibs.client.renderer.SummonSpotRenderer;
 import net.firefoxsalesman.dungeonslibs.entities.LibEntityTypes;
 
 @Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = CLIENT)
 public class ClientEventBusSubscriber {
+	@SubscribeEvent
+	public static void clientInit(FMLClientSetupEvent event) {
+		MinecraftForge.EVENT_BUS.addListener(BossBarRenderer::renderBossBar);
+	}
 
 	@SubscribeEvent
 	public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {

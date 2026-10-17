@@ -3,7 +3,9 @@ package net.firefoxsalesman.dungeonslibs.utils;
 import net.minecraft.core.Holder;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.tags.DamageTypeTags;
 import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageSources;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.level.Level;
 
@@ -21,6 +23,12 @@ public class DamageSourceHelper {
 			default:
 				return false;
 		}
+	}
+
+	public static boolean isMelee(DamageSource source, DamageSources sources) {
+		return !source.is(DamageTypeTags.IS_EXPLOSION)
+				&& !source.is(DamageTypeTags.IS_FIRE)
+				&& !DamageSourceHelper.isSource(source, sources.magic());
 	}
 
 	public static boolean isSource(DamageSource incomingDamage, DamageSource comparableSource) {

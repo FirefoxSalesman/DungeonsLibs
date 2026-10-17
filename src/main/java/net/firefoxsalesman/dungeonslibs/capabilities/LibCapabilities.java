@@ -10,7 +10,8 @@ import net.minecraftforge.common.capabilities.RegisterCapabilitiesEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-
+import net.firefoxsalesman.dungeonslibs.capabilities.ancient.Ancient;
+import net.firefoxsalesman.dungeonslibs.capabilities.ancient.AttacherAncient;
 import net.firefoxsalesman.dungeonslibs.capabilities.artifact.ArtifactUsage;
 import net.firefoxsalesman.dungeonslibs.capabilities.artifact.AttacherArtifactUsage;
 import net.firefoxsalesman.dungeonslibs.capabilities.builtinenchantments.AttacherBuiltInEnchantments;
@@ -33,6 +34,8 @@ import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 
 @Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class LibCapabilities {
+	public static final Capability<Ancient> ANCIENT_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
+	});
 	public static final Capability<Timers> TIMERS_CAPABILITY = CapabilityManager.get(new CapabilityToken<>() {
 	});
 	public static final Capability<BuiltInEnchantments> BUILT_IN_ENCHANTMENTS_CAPABILITY = CapabilityManager
@@ -59,6 +62,7 @@ public class LibCapabilities {
 
 	public static void setupCapabilities() {
 		IEventBus forgeBus = MinecraftForge.EVENT_BUS;
+		forgeBus.addGenericListener(Entity.class, AttacherAncient::attach);
 		forgeBus.addGenericListener(ItemStack.class, AttacherBuiltInEnchantments::attach);
 		forgeBus.addGenericListener(Entity.class, AttacherTimers::attach);
 		forgeBus.addGenericListener(Entity.class, AttacherArtifactUsage::attach);
@@ -72,6 +76,7 @@ public class LibCapabilities {
 
 	@SubscribeEvent
 	public static void registerCaps(RegisterCapabilitiesEvent event) {
+		event.register(Ancient.class);
 		event.register(Timers.class);
 		event.register(Follower.class);
 		event.register(Leader.class);

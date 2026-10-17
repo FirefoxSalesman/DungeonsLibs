@@ -3,6 +3,7 @@ package net.firefoxsalesman.dungeonslibs.commands;
 import com.mojang.brigadier.CommandDispatcher;
 
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
+import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -15,5 +16,9 @@ public class CommandEvents {
 		CommandDispatcher<CommandSourceStack> commandDispatcher = event.getDispatcher();
 		SoulsCommand.register(commandDispatcher);
 		SummonEliteCommand.register(commandDispatcher, event.getBuildContext());
+		ModHelper.ENCHANTWITHMOB.runWithMod(() -> {
+			SummonUniqueAncientCommand.register(commandDispatcher, event.getBuildContext());
+			SummonCommonAncient.register(commandDispatcher, event.getBuildContext());
+		});
 	}
 }

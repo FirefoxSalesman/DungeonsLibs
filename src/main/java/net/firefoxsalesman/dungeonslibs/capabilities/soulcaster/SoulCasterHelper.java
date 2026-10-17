@@ -71,7 +71,7 @@ public class SoulCasterHelper {
 	}
 
 	public static float getSouls(Entity le) {
-		if (ModHelper.hasGoety() && le instanceof Player) {
+		if (ModHelper.GOETY.hasMod() && le instanceof Player) {
 			return (float) SEHelper.getSoulAmountInt((Player) le);
 		} else {
 			SoulCaster soulCasterCapability = getSoulCasterCapability(le);

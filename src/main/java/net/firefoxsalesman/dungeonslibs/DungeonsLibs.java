@@ -6,10 +6,12 @@ import com.mojang.logging.LogUtils;
 
 import net.firefoxsalesman.dungeonslibs.attribute.AttributeRegistry;
 import net.firefoxsalesman.dungeonslibs.capabilities.LibCapabilities;
+import net.firefoxsalesman.dungeonslibs.client.ClientProxy;
 import net.firefoxsalesman.dungeonslibs.config.DungeonsLibrariesConfig;
 import net.firefoxsalesman.dungeonslibs.entities.LibEntityTypes;
 import net.firefoxsalesman.dungeonslibs.init.ParticleInit;
 import net.firefoxsalesman.dungeonslibs.items.ItemTagWrappers;
+import net.firefoxsalesman.dungeonslibs.network.CommonProxy;
 import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.firefoxsalesman.dungeonslibs.items.RangedItemModelProperties;
 import net.firefoxsalesman.dungeonslibs.items.artifacts.config.ArtifactGearConfigRegistry;
@@ -24,6 +26,7 @@ import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig.Type;
@@ -38,8 +41,10 @@ public class DungeonsLibs {
 	public static final String MOD_ID = "dungeonslibs";
 	// Directly reference a slf4j logger
 	public static final Logger LOGGER = LogUtils.getLogger();
+	public static CommonProxy PROXY;
 
 	public DungeonsLibs() {
+		PROXY = DistExecutor.safeRunForDist(() -> ClientProxy::new, () -> CommonProxy::new);
 		ModLoadingContext.get().registerConfig(Type.COMMON, DungeonsLibrariesConfig.COMMON_SPEC,
 				"dungeons-lib-common.toml");
 		FMLJavaModLoadingContext.get().getModEventBus().addListener(this::setup);

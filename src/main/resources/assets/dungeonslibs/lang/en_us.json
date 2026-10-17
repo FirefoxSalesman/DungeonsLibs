@@ -34,5 +34,17 @@
   "key.dungeonslibs.curiosintegration.category": "Dungeons Gear Curios",
   "key.dungeonslibs.curiosintegration.description_slot1": "Artifact Slot 1",
   "key.dungeonslibs.curiosintegration.description_slot2": "Artifact Slot 2",
-  "key.dungeonslibs.curiosintegration.description_slot3": "Artifact Slot 3"
+  "key.dungeonslibs.curiosintegration.description_slot3": "Artifact Slot 3",
+  
+  "commands.summoncommonancient.failed": "Failed to summon non-unique ancient mob",
+  "commands.summoncommonancient.failed.uuid": "A mob with the same uuid already exists",
+  "commands.summoncommonancient.invalidPosition": "Invalid position!",
+  "commands.summoncommonancient.success": "Non-unique ancient mob summoned successfully",
+
+  "commands.summonuniqueancient.failed": "Failed to summon unique ancient mob",
+  "commands.summonuniqueancient.failed.uuid": "A mob with the same uuid already exists",
+  "commands.summonuniqueancient.invalidPosition": "Invalid position!",
+  "commands.summonuniqueancient.success": "Unique ancient mob summoned successfully",
+
+  "dungeonslibs.gilded": "Gilded"
 }
