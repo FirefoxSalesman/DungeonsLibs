@@ -6,6 +6,7 @@ import com.mojang.logging.LogUtils;
 
 import net.firefoxsalesman.dungeonslibs.attribute.AttributeRegistry;
 import net.firefoxsalesman.dungeonslibs.capabilities.LibCapabilities;
+import net.firefoxsalesman.dungeonslibs.capabilities.soulcaster.GoetyEvents;
 import net.firefoxsalesman.dungeonslibs.client.ClientProxy;
 import net.firefoxsalesman.dungeonslibs.config.DungeonsLibrariesConfig;
 import net.firefoxsalesman.dungeonslibs.entities.LibEntityTypes;
@@ -13,6 +14,7 @@ import net.firefoxsalesman.dungeonslibs.init.ParticleInit;
 import net.firefoxsalesman.dungeonslibs.items.ItemTagWrappers;
 import net.firefoxsalesman.dungeonslibs.network.CommonProxy;
 import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
+import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
 import net.firefoxsalesman.dungeonslibs.items.RangedItemModelProperties;
 import net.firefoxsalesman.dungeonslibs.items.artifacts.config.ArtifactGearConfigRegistry;
 import net.firefoxsalesman.dungeonslibs.items.gearconfig.ArmorGearConfigRegistry;
@@ -69,6 +71,7 @@ public class DungeonsLibs {
 
 		ModLootModifiers.register(modEventBus);
 		ParticleInit.register(modEventBus);
+		ModHelper.GOETY.runWithMod(() -> new GoetyEvents().register());
 	}
 
 	private void setup(final FMLCommonSetupEvent event) {

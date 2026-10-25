@@ -19,6 +19,8 @@
 
 package net.firefoxsalesman.dungeonslibs.event;
 
+import javax.annotation.Nullable;
+
 import net.firefoxsalesman.dungeonslibs.entities.SoulOrbEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraftforge.common.MinecraftForge;
@@ -55,6 +57,7 @@ public class PlayerSoulEvent extends PlayerEvent {
 			this.orb = orb;
 		}
 
+		@Nullable
 		public SoulOrbEntity getOrb() {
 			return orb;
 		}
