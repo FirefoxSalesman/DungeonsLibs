@@ -1,53 +1,51 @@
 package net.firefoxsalesman.dungeonslibs.network;
 
+import dev.obscuria.fragmentum.api.network.FragmentumNetworking;
+import dev.obscuria.fragmentum.api.network.PacketPayload;
 import net.firefoxsalesman.dungeonslibs.capabilities.soulcaster.SoulCaster;
 import net.firefoxsalesman.dungeonslibs.capabilities.soulcaster.SoulCasterHelper;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.DistExecutor.SafeRunnable;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.player.Player;
 
-import java.util.function.Supplier;
-
-public class UpdateSoulsMessage {
+public class UpdateSoulsMessage implements PacketPayload {
 	private final float newAmount;
+	public static final PacketPayload.Info<UpdateSoulsMessage> INFO = new PacketPayload.Info<>(
+			UpdateSoulsMessage.class,
+			UpdateSoulsMessage::encode, UpdateSoulsMessage::decode, UpdateSoulsMessage::handle);
+
+	public UpdateSoulsMessage(Player player) {
+		this(SoulCasterHelper.getSouls(player));
+	}
 
 	public UpdateSoulsMessage(float souls) {
 		this.newAmount = souls;
 	}
 
-	public static void encode(UpdateSoulsMessage packet, FriendlyByteBuf buf) {
+	public static void maybeSend(Entity entity) {
+		if (entity instanceof ServerPlayer player)
+			FragmentumNetworking.INSTANCE.sendTo(player,
+					new UpdateSoulsMessage(SoulCasterHelper.getSouls(player)));
+	}
+
+	private static void encode(UpdateSoulsMessage packet, FriendlyByteBuf buf) {
 		buf.writeFloat(packet.newAmount);
 	}
 
-	public static UpdateSoulsMessage decode(FriendlyByteBuf buf) {
+	private static UpdateSoulsMessage decode(FriendlyByteBuf buf) {
 		return new UpdateSoulsMessage(buf.readFloat());
 	}
 
-	public static class UpdateSoulsHandler {
-		public static void handle(UpdateSoulsMessage packet, Supplier<NetworkEvent.Context> ctx) {
-			if (packet != null) {
-				ctx.get().setPacketHandled(true);
-				ctx.get().enqueueWork(
-						() -> DistExecutor.safeRunWhenOn(Dist.CLIENT, () -> new SafeRunnable() {
-							private static final long serialVersionUID = 1;
-
-							@Override
-							public void run() {
-								LocalPlayer player = Minecraft.getInstance().player;
-								if (player != null) {
-									SoulCaster soulCasterCap = SoulCasterHelper
-											.getSoulCasterCapability(
-													player);
-									soulCasterCap.setSouls(packet.newAmount,
-											player);
-								}
-							}
-						}));
-			}
+	private static void handle(Player player, UpdateSoulsMessage packet) {
+		if (player != null) {
+			SoulCaster soulCasterCap = SoulCasterHelper.getSoulCasterCapability(player);
+			soulCasterCap.setSouls(packet.newAmount, player);
 		}
+	}
+
+	@Override
+	public Info<?> info() {
+		return INFO;
 	}
 }

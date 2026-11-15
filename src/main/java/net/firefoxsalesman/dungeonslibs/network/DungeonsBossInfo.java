@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import dev.obscuria.fragmentum.api.network.FragmentumNetworking;
 import net.firefoxsalesman.dungeonslibs.network.message.BossBarMessage;
 import net.minecraft.server.level.ServerBossEvent;
 import net.minecraft.server.level.ServerPlayer;
@@ -39,8 +40,7 @@ public class DungeonsBossInfo extends ServerBossEvent {
 	}
 
 	public void addPlayer(ServerPlayer player) {
-		NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> player),
-				new BossBarMessage(getId(), boss, false));
+		FragmentumNetworking.INSTANCE.sendTo(player, new BossBarMessage(getId(), boss, false));
 		if (boss.getSensing().hasLineOfSight(player)) {
 			super.addPlayer(player);
 		} else {

@@ -23,7 +23,7 @@ public class SoulEvents {
 		if (sourceEntity instanceof Player) {
 			double soulAmount = ((Player) sourceEntity).getAttributeValue(SOUL_GATHERING.get());
 			if (soulAmount > 0) {
-				if (ModHelper.GOETY.hasMod()) {
+				if (ModHelper.GOETY.isLoaded()) {
 					SEHelper.increaseSouls((Player) sourceEntity, (int) soulAmount);
 				} else {
 					entityLiving.level().addFreshEntity(new SoulOrbEntity((Player) sourceEntity,

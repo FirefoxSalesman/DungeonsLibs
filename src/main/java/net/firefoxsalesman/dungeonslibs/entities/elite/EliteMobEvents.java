@@ -1,13 +1,16 @@
 package net.firefoxsalesman.dungeonslibs.entities.elite;
 
+import static java.util.UUID.randomUUID;
+import static net.minecraftforge.registries.ForgeRegistries.ATTRIBUTES;
+
 import com.google.common.collect.ImmutableMultimap;
 
+import dev.obscuria.fragmentum.api.network.FragmentumNetworking;
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.capabilities.elite.EliteMob;
 import net.firefoxsalesman.dungeonslibs.capabilities.elite.EliteMobHelper;
 import net.firefoxsalesman.dungeonslibs.config.DungeonsLibrariesConfig;
 import net.firefoxsalesman.dungeonslibs.network.EliteMobMessage;
-import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
@@ -30,11 +33,7 @@ import net.minecraftforge.event.entity.living.LivingConversionEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
 import net.minecraftforge.registries.ForgeRegistries;
-
-import static java.util.UUID.randomUUID;
-import static net.minecraftforge.registries.ForgeRegistries.ATTRIBUTES;
 
 @Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID)
 public class EliteMobEvents {
@@ -149,8 +148,8 @@ public class EliteMobEvents {
 		Entity target = event.getTarget();
 		if (player instanceof ServerPlayer && target instanceof LivingEntity) {
 			EliteMob cap = EliteMobHelper.getEliteMobCapability(event.getTarget());
-			if (cap.isElite()) {
-				NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+			if (cap.isElite() && player instanceof ServerPlayer serverPlayer) {
+				FragmentumNetworking.INSTANCE.sendTo(serverPlayer,
 						new EliteMobMessage(target.getId(), cap.isElite(), cap.getTexture()));
 			}
 		}

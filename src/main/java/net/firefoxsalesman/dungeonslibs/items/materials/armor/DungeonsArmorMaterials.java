@@ -1,11 +1,15 @@
 package net.firefoxsalesman.dungeonslibs.items.materials.armor;
 
+import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.data.util.DefaultsCodecJsonDataManager;
 import net.firefoxsalesman.dungeonslibs.network.materials.ArmorMaterialSyncPacket;
 import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ArmorMaterials;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static net.minecraft.world.item.ArmorMaterials.*;
 
+@Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID)
 public class DungeonsArmorMaterials {
 
 	public static final DefaultsCodecJsonDataManager<ArmorMaterial> ARMOR_MATERIALS = new DefaultsCodecJsonDataManager<>(
@@ -68,7 +73,8 @@ public class DungeonsArmorMaterials {
 		return new ArmorMaterialSyncPacket(map);
 	}
 
-	public static void subscribe() {
-		ARMOR_MATERIALS.subscribeAsSyncable(NetworkHandler.INSTANCE, DungeonsArmorMaterials::toPacket);
+	@SubscribeEvent
+	public static void onSyncDatapacks(OnDatapackSyncEvent event) {
+		NetworkHandler.sendDatapackSyncPacket(event.getPlayer(), toPacket(ARMOR_MATERIALS.getData()));
 	}
 }

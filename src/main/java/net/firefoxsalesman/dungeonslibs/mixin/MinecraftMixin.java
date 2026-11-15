@@ -1,12 +1,13 @@
 package net.firefoxsalesman.dungeonslibs.mixin;
 
 import net.firefoxsalesman.dungeonslibs.network.SwitchHandMessage;
-import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.minecraft.client.Minecraft;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import dev.obscuria.fragmentum.api.network.FragmentumNetworking;
 
 @Mixin(Minecraft.class)
 public class MinecraftMixin {
@@ -26,7 +27,7 @@ public class MinecraftMixin {
 	@Inject(at = @At(value = "INVOKE", target = "Lnet/minecraftforge/client/event/InputEvent$InteractionKeyMappingTriggered;shouldSwingHand()Z"), method = "Lnet/minecraft/client/Minecraft;startAttack()Z")
 	private void dungeons_libraries_startAttack_onSwing(CallbackInfoReturnable<Boolean> cir) {
 		if (SHOULD_SWITCH_HAND) {
-			NetworkHandler.INSTANCE.sendToServer(new SwitchHandMessage());
+			FragmentumNetworking.INSTANCE.sendToServer(new SwitchHandMessage());
 			SHOULD_SWITCH_HAND = false;
 		}
 	}

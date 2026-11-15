@@ -2,7 +2,7 @@ package net.firefoxsalesman.dungeonslibs.client;
 
 /**
  * A timer for animations. Intended to remove the need to declare all the
- * different ticks & lengths by hand.
+ * different ticks and lengths by hand.
  */
 public class AnimationTimer {
 	private int tick;

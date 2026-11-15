@@ -1,12 +1,17 @@
 package net.firefoxsalesman.dungeonslibs.items.gearconfig;
 
-import net.firefoxsalesman.dungeonslibs.data.util.CodecJsonDataManager;
-import net.firefoxsalesman.dungeonslibs.network.gearconfig.BowGearConfigSyncPacket;
-import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
-import net.minecraft.resources.ResourceLocation;
-
 import java.util.Map;
 
+import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
+import net.firefoxsalesman.dungeonslibs.data.util.CodecJsonDataManager;
+import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
+import net.firefoxsalesman.dungeonslibs.network.gearconfig.BowGearConfigSyncPacket;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+
+@Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID)
 public class BowGearConfigRegistry {
 
 	public static final CodecJsonDataManager<BowGearConfig> BOW_GEAR_CONFIGS = new CodecJsonDataManager<>(
@@ -24,7 +29,8 @@ public class BowGearConfigRegistry {
 		return new BowGearConfigSyncPacket(map);
 	}
 
-	public static void subscribe() {
-		BOW_GEAR_CONFIGS.subscribeAsSyncable(NetworkHandler.INSTANCE, BowGearConfigRegistry::toPacket);
+	@SubscribeEvent
+	public static void onSyncDatapacks(OnDatapackSyncEvent event) {
+		NetworkHandler.sendDatapackSyncPacket(event.getPlayer(), toPacket(BOW_GEAR_CONFIGS.getData()));
 	}
 }

@@ -1,15 +1,15 @@
 package net.firefoxsalesman.dungeonslibs.client;
 
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.client.event.EntityRenderersEvent;
-import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
-import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.client.artifactBar.ArtifactsBarRenderer;
-import net.firefoxsalesman.dungeonslibs.client.renderer.water.CustomDrownedRenderer;
-import net.minecraft.world.entity.EntityType;
-import net.minecraftforge.fml.common.Mod;
+import net.firefoxsalesman.dungeonslibs.client.gui.BossBarRenderer;
 import net.minecraftforge.api.distmarker.Dist;
+import net.minecraftforge.client.event.RegisterGuiOverlaysEvent;
+import net.minecraftforge.client.gui.overlay.VanillaGuiOverlay;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 @Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class ClientEvents {
@@ -23,7 +23,7 @@ public class ClientEvents {
 	}
 
 	@SubscribeEvent
-	public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
-		event.registerEntityRenderer(EntityType.DROWNED, CustomDrownedRenderer::new);
+	public static void clientInit(FMLClientSetupEvent event) {
+		MinecraftForge.EVENT_BUS.addListener(BossBarRenderer::renderBossBar);
 	}
 }

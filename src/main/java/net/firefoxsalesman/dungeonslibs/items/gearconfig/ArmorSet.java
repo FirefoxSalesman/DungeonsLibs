@@ -1,18 +1,18 @@
 package net.firefoxsalesman.dungeonslibs.items.gearconfig;
 
+import dev.obscuria.fragmentum.api.registry.Deferred;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.registries.RegistryObject;
 
 public class ArmorSet {
 	private final ResourceLocation registryName;
-	private final RegistryObject<Item> head;
-	private final RegistryObject<Item> chest;
-	private final RegistryObject<Item> legs;
-	private final RegistryObject<Item> feet;
+	private final Deferred<Item> head;
+	private final Deferred<Item> chest;
+	private final Deferred<Item> legs;
+	private final Deferred<Item> feet;
 
-	public ArmorSet(ResourceLocation registryName, RegistryObject<Item> head, RegistryObject<Item> chest,
-			RegistryObject<Item> legs, RegistryObject<Item> feet) {
+	public ArmorSet(ResourceLocation registryName, Deferred<Item> head, Deferred<Item> chest,
+			Deferred<Item> legs, Deferred<Item> feet) {
 		this.registryName = registryName;
 		this.head = head;
 		this.chest = chest;
@@ -24,19 +24,19 @@ public class ArmorSet {
 		return registryName;
 	}
 
-	public RegistryObject<Item> getHead() {
+	public Deferred<Item> getHead() {
 		return head;
 	}
 
-	public RegistryObject<Item> getChest() {
+	public Deferred<Item> getChest() {
 		return chest;
 	}
 
-	public RegistryObject<Item> getLegs() {
+	public Deferred<Item> getLegs() {
 		return legs;
 	}
 
-	public RegistryObject<Item> getFeet() {
+	public Deferred<Item> getFeet() {
 		return feet;
 	}
 }

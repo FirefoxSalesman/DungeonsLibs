@@ -1,16 +1,22 @@
 package net.firefoxsalesman.dungeonslibs.network;
 
-import net.firefoxsalesman.dungeonslibs.network.client.ClientHandler;
+import dev.obscuria.fragmentum.api.network.PacketPayload;
+import net.firefoxsalesman.dungeonslibs.capabilities.elite.EliteMob;
+import net.firefoxsalesman.dungeonslibs.capabilities.elite.EliteMobHelper;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 
-import java.util.function.Supplier;
-
-public class EliteMobMessage {
+public class EliteMobMessage implements PacketPayload {
 	private final int entityId;
 	private final boolean isElite;
 	private final ResourceLocation texture;
+
+	public static final PacketPayload.Info<EliteMobMessage> INFO = new PacketPayload.Info<>(
+			EliteMobMessage.class,
+			EliteMobMessage::encode, EliteMobMessage::decode, EliteMobMessage::handle);
 
 	public EliteMobMessage(int entityId, boolean isElite, ResourceLocation texture) {
 		this.entityId = entityId;
@@ -18,23 +24,29 @@ public class EliteMobMessage {
 		this.texture = texture;
 	}
 
-	public void encode(FriendlyByteBuf buffer) {
-		buffer.writeInt(this.entityId);
-		buffer.writeBoolean(isElite);
-		buffer.writeResourceLocation(texture);
+	private static void encode(EliteMobMessage packet, FriendlyByteBuf buffer) {
+		buffer.writeInt(packet.entityId);
+		buffer.writeBoolean(packet.isElite);
+		buffer.writeResourceLocation(packet.texture);
 	}
 
-	public static EliteMobMessage decode(FriendlyByteBuf buffer) {
+	private static EliteMobMessage decode(FriendlyByteBuf buffer) {
 		int entityId = buffer.readInt();
 		boolean isElite = buffer.readBoolean();
 		ResourceLocation texture = buffer.readResourceLocation();
-
 		return new EliteMobMessage(entityId, isElite, texture);
 	}
 
-	public static void handle(EliteMobMessage message, Supplier<NetworkEvent.Context> contextSupplier) {
-		ClientHandler.handleEliteMobMessage(message, contextSupplier);
-		contextSupplier.get().setPacketHandled(true);
+	private static void handle(Player player, EliteMobMessage packet) {
+		Entity entity = player.level().getEntity(packet.getEntityId());
+		if (entity instanceof LivingEntity) {
+			EliteMob cap = EliteMobHelper.getEliteMobCapability(entity);
+			cap.setElite(packet.isElite());
+			cap.setTexture(packet.getTexture());
+			if (cap.isElite()) {
+				entity.refreshDimensions();
+			}
+		}
 	}
 
 	public int getEntityId() {
@@ -47,5 +59,10 @@ public class EliteMobMessage {
 
 	public ResourceLocation getTexture() {
 		return texture;
+	}
+
+	@Override
+	public Info<?> info() {
+		return INFO;
 	}
 }

@@ -1,16 +1,21 @@
 package net.firefoxsalesman.dungeonslibs.items.materials.weapon;
 
+import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.data.util.DefaultsCodecJsonDataManager;
 import net.firefoxsalesman.dungeonslibs.network.materials.WeaponMaterialSyncPacket;
 import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Tier;
+import net.minecraftforge.event.OnDatapackSyncEvent;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.common.Mod;
 
 import java.util.Collection;
 import java.util.Map;
 
 import static net.minecraft.world.item.Tiers.*;
 
+@Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID)
 public class WeaponMaterials {
 
 	public static final DefaultsCodecJsonDataManager<Tier> WEAPON_MATERIALS = new DefaultsCodecJsonDataManager<>(
@@ -41,7 +46,8 @@ public class WeaponMaterials {
 		return new WeaponMaterialSyncPacket(map);
 	}
 
-	public static void subscribe() {
-		WEAPON_MATERIALS.subscribeAsSyncable(NetworkHandler.INSTANCE, WeaponMaterials::toPacket);
+	@SubscribeEvent
+	public static void onSyncDatapacks(OnDatapackSyncEvent event) {
+		NetworkHandler.sendDatapackSyncPacket(event.getPlayer(), toPacket(WEAPON_MATERIALS.getData()));
 	}
 }

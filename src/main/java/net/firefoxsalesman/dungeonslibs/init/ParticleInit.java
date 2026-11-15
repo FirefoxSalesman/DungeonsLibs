@@ -1,27 +1,20 @@
 package net.firefoxsalesman.dungeonslibs.init;
 
-import net.minecraft.core.particles.ParticleType;
+import dev.obscuria.fragmentum.api.registry.Deferred;
+import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
+import net.firefoxsalesman.dungeonslibs.utils.ResourceLocationHelper;
 import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
-
-import static net.firefoxsalesman.dungeonslibs.DungeonsLibs.MOD_ID;
+import net.minecraft.core.registries.Registries;
 
 public class ParticleInit {
-	private static final DeferredRegister<ParticleType<?>> PARTICLES = DeferredRegister
-			.create(ForgeRegistries.PARTICLE_TYPES, MOD_ID);
+	public static final Deferred<SimpleParticleType> ELECTRIC_SHOCK = makeParticle("electric_shock");
 
-	public static final RegistryObject<SimpleParticleType> ELECTRIC_SHOCK = makeParticle("electric_shock");
+	public static final Deferred<SimpleParticleType> SNOWFLAKE = makeParticle("snowflake");
 
-	public static final RegistryObject<SimpleParticleType> SNOWFLAKE = makeParticle("snowflake");
-
-	public static void register(IEventBus eventBus) {
-		PARTICLES.register(eventBus);
+	private static Deferred<SimpleParticleType> makeParticle(String name) {
+		return DungeonsLibs.REGISTRAR.register(Registries.PARTICLE_TYPE, ResourceLocationHelper.modLoc(name),
+				() -> new SimpleParticleType(true)).as();
 	}
 
-	private static RegistryObject<SimpleParticleType> makeParticle(String name) {
-		return PARTICLES.register(name, () -> new SimpleParticleType(true));
-	}
+	public static void init() {}
 }

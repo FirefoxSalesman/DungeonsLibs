@@ -1,20 +1,18 @@
 package net.firefoxsalesman.dungeonslibs.capabilities.soulcaster;
 
-import static net.firefoxsalesman.dungeonslibs.capabilities.LibCapabilities.SOUL_CASTER_CAPABILITY;
 import static net.firefoxsalesman.dungeonslibs.attribute.AttributeRegistry.SOUL_CAP;
+import static net.firefoxsalesman.dungeonslibs.capabilities.LibCapabilities.SOUL_CASTER_CAPABILITY;
 
 import com.Polarice3.Goety.utils.SEHelper;
+
 import net.firefoxsalesman.dungeonslibs.items.interfaces.ISoulConsumer;
 import net.firefoxsalesman.dungeonslibs.network.UpdateSoulsMessage;
 import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
-import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.network.PacketDistributor;
 
 public class SoulCasterHelper {
 
@@ -22,20 +20,14 @@ public class SoulCasterHelper {
 		SoulCaster soulCasterCapability = getSoulCasterCapability(le);
 		float newAmount = getSouls(le) + amount + 1;
 		soulCasterCapability.setSouls(newAmount, le);
-		if (le instanceof ServerPlayer) {
-			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) le),
-					new UpdateSoulsMessage(getSouls(le)));
-		}
+		UpdateSoulsMessage.maybeSend(le);
 	}
 
 	public static void setSouls(LivingEntity le, float amount) {
 		SoulCaster soulCasterCapability = getSoulCasterCapability(le);
 		float newAmount = amount;
 		soulCasterCapability.setSouls(newAmount, le);
-		if (le instanceof ServerPlayer)
-			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) le),
-					new UpdateSoulsMessage(getSouls(le)));
-
+		UpdateSoulsMessage.maybeSend(le);
 	}
 
 	public static boolean consumeSouls(LivingEntity le, float amount) {
@@ -47,10 +39,7 @@ public class SoulCasterHelper {
 			return false;
 		float newAmount = soulCount - amount;
 		SoulCasterHelper.setSouls(le, newAmount);
-		if (le instanceof ServerPlayer)
-			NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) le),
-					new UpdateSoulsMessage(getSouls(le)));
-
+		UpdateSoulsMessage.maybeSend(le);
 		return true;
 	}
 
@@ -71,7 +60,7 @@ public class SoulCasterHelper {
 	}
 
 	public static float getSouls(Entity le) {
-		if (ModHelper.GOETY.hasMod() && le instanceof Player) {
+		if (ModHelper.GOETY.isLoaded() && le instanceof Player) {
 			return (float) SEHelper.getSoulAmountInt((Player) le);
 		} else {
 			SoulCaster soulCasterCapability = getSoulCasterCapability(le);

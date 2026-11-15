@@ -4,7 +4,7 @@ import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.integration.curios.client.message.CuriosArtifactStartMessage;
 import net.firefoxsalesman.dungeonslibs.items.artifacts.ArtifactItem;
 import net.firefoxsalesman.dungeonslibs.items.artifacts.ArtifactUseContext;
-import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
+import dev.obscuria.fragmentum.api.network.FragmentumNetworking;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
@@ -68,7 +68,7 @@ public class CuriosKeyBindings {
 	}
 
 	private static void curiosStartMessage(int slot, BlockHitResult blockHitResult, LocalPlayer player) {
-		NetworkHandler.INSTANCE.sendToServer(new CuriosArtifactStartMessage(slot, blockHitResult));
+		FragmentumNetworking.INSTANCE.sendToServer(new CuriosArtifactStartMessage(slot, blockHitResult));
 		CuriosApi.getCuriosInventory(player).ifPresent(iCuriosItemHandler -> {
 			Optional<ICurioStacksHandler> artifactStackHandler = iCuriosItemHandler
 					.getStacksHandler("artifact");

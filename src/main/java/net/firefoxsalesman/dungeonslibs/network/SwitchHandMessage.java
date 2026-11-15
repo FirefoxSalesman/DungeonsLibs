@@ -1,36 +1,38 @@
 package net.firefoxsalesman.dungeonslibs.network;
 
+import dev.obscuria.fragmentum.api.network.PacketPayload;
 import net.firefoxsalesman.dungeonslibs.combat.DualWieldHandler;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
 
-import java.util.function.Supplier;
+public class SwitchHandMessage implements PacketPayload {
 
-public class SwitchHandMessage {
+    public static final PacketPayload.Info<SwitchHandMessage> INFO = new PacketPayload.Info<>(
+        SwitchHandMessage.class,
+        SwitchHandMessage::encode,
+        SwitchHandMessage::decode,
+        SwitchHandMessage::handle
+    );
 
-	public SwitchHandMessage() {
-	}
+    public SwitchHandMessage() {}
 
-	public static void encode(SwitchHandMessage packet, FriendlyByteBuf buf) {
+    private static void encode(SwitchHandMessage packet, FriendlyByteBuf buf) {
+    }
 
-	}
+    private static SwitchHandMessage decode(FriendlyByteBuf buf) {
+        return new SwitchHandMessage();
+    }
 
-	public static SwitchHandMessage decode(FriendlyByteBuf buf) {
-		return new SwitchHandMessage();
-	}
+    private static void handle(Player player, SwitchHandMessage packet) {
+        if (player != null && player instanceof ServerPlayer p) {
+            DualWieldHandler.switchHand(p);
+        }
+    }
 
-	public static class SwitchHandHandler {
-		public static void handle(SwitchHandMessage packet, Supplier<NetworkEvent.Context> ctx) {
-			if (packet != null) {
-				ctx.get().setPacketHandled(true);
-				ctx.get().enqueueWork(() -> {
-					ServerPlayer player = ctx.get().getSender();
-					if (player != null) {
-						DualWieldHandler.switchHand(player);
-					}
-				});
-			}
-		}
-	}
+    @Override
+    public Info<?> info() {
+        return INFO;
+    }
 }
+

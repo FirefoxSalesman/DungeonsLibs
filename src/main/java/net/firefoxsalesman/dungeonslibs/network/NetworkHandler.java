@@ -1,9 +1,9 @@
 package net.firefoxsalesman.dungeonslibs.network;
 
-import java.util.function.BiConsumer;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
+import dev.obscuria.fragmentum.api.network.FragmentumNetworking;
+import dev.obscuria.fragmentum.api.network.PacketPayload;
+import dev.obscuria.fragmentum.api.network.PayloadRegistrar;
+import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.integration.curios.client.message.CuriosArtifactStartMessage;
 import net.firefoxsalesman.dungeonslibs.integration.curios.client.message.CuriosArtifactStopMessage;
 import net.firefoxsalesman.dungeonslibs.network.gearconfig.ArmorGearConfigSyncPacket;
@@ -16,10 +16,10 @@ import net.firefoxsalesman.dungeonslibs.network.materials.WeaponMaterialSyncPack
 import net.firefoxsalesman.dungeonslibs.network.message.AncientMessage;
 import net.firefoxsalesman.dungeonslibs.network.message.BossBarMessage;
 import net.firefoxsalesman.dungeonslibs.utils.ResourceLocationHelper;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import net.minecraftforge.server.ServerLifecycleHooks;
 
 public class NetworkHandler {
 	public static final SimpleChannel INSTANCE = NetworkRegistry.ChannelBuilder.named(
@@ -35,46 +35,32 @@ public class NetworkHandler {
 	}
 
 	public static void init() {
-		buildMessage(UpdateSoulsMessage.class, UpdateSoulsMessage::encode,
-				UpdateSoulsMessage::decode, UpdateSoulsMessage.UpdateSoulsHandler::handle);
-		buildMessage(ArmorGearConfigSyncPacket.class, ArmorGearConfigSyncPacket::encode,
-				ArmorGearConfigSyncPacket::decode, ArmorGearConfigSyncPacket::onPacketReceived);
-		buildMessage(MeleeGearConfigSyncPacket.class, MeleeGearConfigSyncPacket::encode,
-				MeleeGearConfigSyncPacket::decode, MeleeGearConfigSyncPacket::onPacketReceived);
-		buildMessage(BowGearConfigSyncPacket.class, BowGearConfigSyncPacket::encode,
-				BowGearConfigSyncPacket::decode, BowGearConfigSyncPacket::onPacketReceived);
-		buildMessage(CrossbowGearConfigSyncPacket.class, CrossbowGearConfigSyncPacket::encode,
-				CrossbowGearConfigSyncPacket::decode, CrossbowGearConfigSyncPacket::onPacketReceived);
-		buildMessage(ArmorMaterialSyncPacket.class, ArmorMaterialSyncPacket::encode,
-				ArmorMaterialSyncPacket::decode, ArmorMaterialSyncPacket::onPacketReceived);
-		buildMessage(WeaponMaterialSyncPacket.class, WeaponMaterialSyncPacket::encode,
-				WeaponMaterialSyncPacket::decode, WeaponMaterialSyncPacket::onPacketReceived);
-		buildMessage(CuriosArtifactStartMessage.class, CuriosArtifactStartMessage::encode,
-				CuriosArtifactStartMessage::decode,
-				CuriosArtifactStartMessage.CuriosArtifactHandler::handle);
-		buildMessage(CuriosArtifactStopMessage.class, CuriosArtifactStopMessage::encode,
-				CuriosArtifactStopMessage::decode, CuriosArtifactStopMessage::handle);
-		buildMessage(EliteMobMessage.class, EliteMobMessage::encode, EliteMobMessage::decode,
-				EliteMobMessage::handle);
-		buildMessage(BreakItemMessage.class, BreakItemMessage::encode, BreakItemMessage::decode,
-				BreakItemMessage.BreakItemHandler::handle);
-		buildMessage(SwitchHandMessage.class, SwitchHandMessage::encode, SwitchHandMessage::decode,
-				SwitchHandMessage.SwitchHandHandler::handle);
-		buildMessage(ArtifactGearConfigSyncPacket.class, ArtifactGearConfigSyncPacket::encode,
-				ArtifactGearConfigSyncPacket::decode,
-				ArtifactGearConfigSyncPacket::onPacketReceived);
-		buildMessage(AncientMessage.class, AncientMessage::encode, AncientMessage::decode,
-				AncientMessage::onPacketReceived);
-		buildMessage(BossBarMessage.class, BossBarMessage::encode, BossBarMessage::decode,
-				BossBarMessage::onPacketReceived);
+		PayloadRegistrar registrar = FragmentumNetworking.INSTANCE.registrar(DungeonsLibs.MOD_ID);
+		registrar.registerClientbound(BreakItemMessage.INFO);
+		registrar.registerClientbound(UpdateSoulsMessage.INFO);
+		registrar.registerClientbound(ArmorGearConfigSyncPacket.INFO);
+		registrar.registerClientbound(MeleeGearConfigSyncPacket.INFO);
+		registrar.registerClientbound(BowGearConfigSyncPacket.INFO);
+		registrar.registerClientbound(CrossbowGearConfigSyncPacket.INFO);
+		registrar.registerClientbound(ArmorMaterialSyncPacket.INFO);
+		registrar.registerClientbound(WeaponMaterialSyncPacket.INFO);
+		registrar.registerClientbound(ArtifactGearConfigSyncPacket.INFO);
+		registrar.registerServerbound(CuriosArtifactStartMessage.INFO);
+		registrar.registerClientbound(CuriosArtifactStopMessage.INFO);
+		registrar.registerClientbound(EliteMobMessage.INFO);
+		registrar.registerServerbound(SwitchHandMessage.INFO);
+		registrar.registerClientbound(AncientMessage.INFO);
+		registrar.registerClientbound(BossBarMessage.INFO);
 	}
 
-	private static <T> void buildMessage(Class<T> kind, BiConsumer<T, FriendlyByteBuf> encoder,
-			Function<FriendlyByteBuf, T> decoder,
-			BiConsumer<T, Supplier<NetworkEvent.Context>> consumerMainThread) {
-		INSTANCE.messageBuilder(kind, PACKET_COUNTER++)
-				.encoder(encoder).decoder(decoder)
-				.consumerMainThread(consumerMainThread)
-				.add();
+	/**
+	 * This is meant to be used in event bus subscribers for datapack reloaders.
+	 */
+	public static void sendDatapackSyncPacket(ServerPlayer player, PacketPayload packet) {
+		if (player != null)
+			FragmentumNetworking.INSTANCE.sendTo(player, packet);
+		else
+			FragmentumNetworking.INSTANCE.sendToAll(ServerLifecycleHooks.getCurrentServer(),
+					packet);
 	}
 }

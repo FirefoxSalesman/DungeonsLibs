@@ -7,9 +7,9 @@ import net.minecraft.client.renderer.item.ItemPropertyFunction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.*;
-import net.minecraftforge.registries.RegistryObject;
-
 import java.util.Map;
+
+import dev.obscuria.fragmentum.api.registry.Deferred;
 
 import static net.firefoxsalesman.dungeonslibs.utils.RangedAttackHelper.getCrossbowChargeTime;
 
@@ -40,27 +40,27 @@ public class RangedItemModelProperties {
 		}
 	}
 
-	public static void addRangedModelProperties(RegistryObject<Item> itemRegistryObject) {
-		if (itemRegistryObject.get() instanceof BowItem) {
-			addBowModelProperties(itemRegistryObject);
-		} else if (itemRegistryObject.get() instanceof CrossbowItem) {
-			addCrossbowModelProperties(itemRegistryObject);
+	public static void addRangedModelProperties(Deferred<Item> deferredItem) {
+		if (deferredItem.get() instanceof BowItem) {
+			addBowModelProperties(deferredItem);
+		} else if (deferredItem.get() instanceof CrossbowItem) {
+			addCrossbowModelProperties(deferredItem);
 		}
 	}
 
-	public static void addBowModelProperties(RegistryObject<Item> itemRegistryObject) {
-		ItemProperties.register(itemRegistryObject.get(), PULL_PROPERTY,
+	public static void addBowModelProperties(Deferred<Item> deferredItem) {
+		ItemProperties.register(deferredItem.get(), PULL_PROPERTY,
 				RangedItemModelProperties::getBowPullProperty);
-		ItemProperties.register(itemRegistryObject.get(), PULLING_PROPERTY,
+		ItemProperties.register(deferredItem.get(), PULLING_PROPERTY,
 				RangedItemModelProperties::getBowPullingProperty);
 	}
 
-	public static void addCrossbowModelProperties(RegistryObject<Item> itemRegistryObject) {
-		ItemProperties.register(itemRegistryObject.get(), PULL_PROPERTY,
+	public static void addCrossbowModelProperties(Deferred<Item> deferredItem) {
+		ItemProperties.register(deferredItem.get(), PULL_PROPERTY,
 				RangedItemModelProperties::getCrossbowPullProperty);
-		ItemProperties.register(itemRegistryObject.get(), PULLING_PROPERTY,
+		ItemProperties.register(deferredItem.get(), PULLING_PROPERTY,
 				RangedItemModelProperties::getCrossbowPullingProperty);
-		ItemProperties.register(itemRegistryObject.get(), CHARGED_PROPERTY,
+		ItemProperties.register(deferredItem.get(), CHARGED_PROPERTY,
 				RangedItemModelProperties::getCrossbowChargedProperty);
 	}
 

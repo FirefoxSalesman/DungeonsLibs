@@ -1,27 +1,45 @@
 package net.firefoxsalesman.dungeonslibs.integration.curios.client.message;
 
-import net.firefoxsalesman.dungeonslibs.network.client.ClientHandler;
+import dev.obscuria.fragmentum.api.network.PacketPayload;
+import net.firefoxsalesman.dungeonslibs.capabilities.artifact.ArtifactUsage;
+import net.firefoxsalesman.dungeonslibs.capabilities.artifact.ArtifactUsageHelper;
+import net.firefoxsalesman.dungeonslibs.items.artifacts.ArtifactItem;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 
-import java.util.function.Supplier;
-
-public class CuriosArtifactStopMessage {
+public class CuriosArtifactStopMessage implements PacketPayload {
+	public static final PacketPayload.Info<CuriosArtifactStopMessage> INFO = new PacketPayload.Info<>(
+			CuriosArtifactStopMessage.class,
+			CuriosArtifactStopMessage::encode,
+			CuriosArtifactStopMessage::decode,
+			CuriosArtifactStopMessage::handle);
 
 	public CuriosArtifactStopMessage() {
 	}
 
-	public void encode(FriendlyByteBuf buf) {
-
+	private static void encode(CuriosArtifactStopMessage packet, FriendlyByteBuf buf) {
+		// No fields to encode
 	}
 
-	public static CuriosArtifactStopMessage decode(FriendlyByteBuf buf) {
+	private static CuriosArtifactStopMessage decode(FriendlyByteBuf buf) {
 		return new CuriosArtifactStopMessage();
 	}
 
-	public static void handle(CuriosArtifactStopMessage packet, Supplier<NetworkEvent.Context> ctx) {
-		ClientHandler.handleCuriosArtifactStopMessage(packet, ctx);
-		ctx.get().setPacketHandled(true);
+	private static void handle(Player player, CuriosArtifactStopMessage packet) {
+		if (player != null) {
+			ArtifactUsage cap = ArtifactUsageHelper.getArtifactUsageCapability(player);
+			ItemStack artifactStack = cap.getUsingArtifact();
+			if (artifactStack != null && artifactStack
+					.getItem() instanceof ArtifactItem artifactItem) {
+				artifactItem.stopUsingArtifact(player);
+				cap.stopUsingArtifact();
+			}
+		}
 	}
 
+	@Override
+	public Info<?> info() {
+		return INFO;
+	}
 }

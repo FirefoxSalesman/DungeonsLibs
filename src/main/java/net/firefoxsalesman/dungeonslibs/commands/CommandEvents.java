@@ -16,7 +16,7 @@ public class CommandEvents {
 		CommandDispatcher<CommandSourceStack> commandDispatcher = event.getDispatcher();
 		SoulsCommand.register(commandDispatcher);
 		SummonEliteCommand.register(commandDispatcher, event.getBuildContext());
-		ModHelper.ENCHANTWITHMOB.runWithMod(() -> {
+		ModHelper.ENCHANTWITHMOB.runIfLoaded(() -> () -> {
 			SummonUniqueAncientCommand.register(commandDispatcher, event.getBuildContext());
 			SummonCommonAncient.register(commandDispatcher, event.getBuildContext());
 		});

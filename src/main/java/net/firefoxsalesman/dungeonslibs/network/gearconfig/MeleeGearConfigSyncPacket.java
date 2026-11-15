@@ -1,49 +1,51 @@
 package net.firefoxsalesman.dungeonslibs.network.gearconfig;
 
+import static net.firefoxsalesman.dungeonslibs.items.GearConfigReloadListener.reloadAllItems;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mojang.serialization.Codec;
 
+import dev.obscuria.fragmentum.api.network.PacketPayload;
 import net.firefoxsalesman.dungeonslibs.items.gearconfig.MeleeGearConfig;
 import net.firefoxsalesman.dungeonslibs.items.gearconfig.MeleeGearConfigRegistry;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkEvent;
+import net.minecraft.world.entity.player.Player;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
-
-import static net.firefoxsalesman.dungeonslibs.items.GearConfigReloadListener.reloadAllItems;
-
-public class MeleeGearConfigSyncPacket {
+public class MeleeGearConfigSyncPacket implements PacketPayload {
+	public static PacketPayload.Info<MeleeGearConfigSyncPacket> INFO = new PacketPayload.Info<>(
+			MeleeGearConfigSyncPacket.class, MeleeGearConfigSyncPacket::encode,
+			MeleeGearConfigSyncPacket::decode, MeleeGearConfigSyncPacket::onPacketReceived);
 	private static final Codec<Map<ResourceLocation, MeleeGearConfig>> MAPPER = Codec
 			.unboundedMap(ResourceLocation.CODEC, MeleeGearConfig.CODEC);
 
-	public final Map<ResourceLocation, MeleeGearConfig> data;
+	private final Map<ResourceLocation, MeleeGearConfig> data;
 
 	public MeleeGearConfigSyncPacket(Map<ResourceLocation, MeleeGearConfig> data) {
 		this.data = data;
 	}
 
-	public void encode(FriendlyByteBuf buffer) {
-		buffer.writeNbt((CompoundTag) (MAPPER.encodeStart(NbtOps.INSTANCE, data).result()
+	private static void encode(MeleeGearConfigSyncPacket packet, FriendlyByteBuf buffer) {
+		buffer.writeNbt((CompoundTag) (MAPPER.encodeStart(NbtOps.INSTANCE, packet.data).result()
 				.orElse(new CompoundTag())));
 	}
 
-	public static MeleeGearConfigSyncPacket decode(FriendlyByteBuf buffer) {
+	private static MeleeGearConfigSyncPacket decode(FriendlyByteBuf buffer) {
 		return new MeleeGearConfigSyncPacket(
 				MAPPER.parse(NbtOps.INSTANCE, buffer.readNbt()).result().orElse(new HashMap<>()));
 	}
 
-	public void onPacketReceived(Supplier<NetworkEvent.Context> contextGetter) {
-		NetworkEvent.Context context = contextGetter.get();
-		context.enqueueWork(this::handlePacketOnMainThread);
-		context.setPacketHandled(true);
+	private static void onPacketReceived(Player player, MeleeGearConfigSyncPacket packet) {
+		MeleeGearConfigRegistry.MELEE_GEAR_CONFIGS.setData(packet.data);
+		reloadAllItems();
 	}
 
-	private void handlePacketOnMainThread() {
-		MeleeGearConfigRegistry.MELEE_GEAR_CONFIGS.setData(data);
-		reloadAllItems();
+	@Override
+	public Info<?> info() {
+		return INFO;
 	}
 }

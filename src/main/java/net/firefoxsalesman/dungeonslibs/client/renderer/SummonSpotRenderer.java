@@ -38,6 +38,7 @@ public class SummonSpotRenderer extends ProjectileRenderer<SummonSpotEntity> {
 	@Override
 	public RenderType getRenderType(SummonSpotEntity animatable, ResourceLocation texture,
 			MultiBufferSource bufferSource, float partialTick) {
-		return RenderType.entityTranslucent(getTextureLocation(animatable));
+		// HACK It gets very pissy about using getTextureLocation(). I blame stonecutter
+		return RenderType.entityTranslucent(model.getTextureResource(animatable, this));
 	}
 }

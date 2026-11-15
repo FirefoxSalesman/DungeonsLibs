@@ -4,10 +4,11 @@ import java.util.List;
 
 import org.violetmoon.quark.content.tools.base.RuneColor;
 import org.violetmoon.quark.content.tools.module.ColorRunesModule;
+
+import dev.obscuria.fragmentum.api.network.FragmentumNetworking;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.firefoxsalesman.dungeonslibs.DungeonsLibs;
 import net.firefoxsalesman.dungeonslibs.items.GildedItemHelper;
-import net.firefoxsalesman.dungeonslibs.network.NetworkHandler;
 import net.firefoxsalesman.dungeonslibs.network.message.AncientMessage;
 import net.firefoxsalesman.dungeonslibs.utils.LootTableHelper;
 import net.firefoxsalesman.dungeonslibs.utils.ModHelper;
@@ -29,7 +30,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.Event.Result;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.network.PacketDistributor;
 
 @Mod.EventBusSubscriber(modid = DungeonsLibs.MOD_ID)
 public class AncientEvents {
@@ -38,12 +38,11 @@ public class AncientEvents {
 	public static void onPlayerStartTracking(PlayerEvent.StartTracking event) {
 		Player player = event.getEntity();
 		Entity target = event.getTarget();
-		if (player instanceof ServerPlayer && target != null && player != null) {
+		if (player instanceof ServerPlayer serverPlayer && target != null && player != null) {
 			Ancient cap = AncientHelper.getAncientCapability(target);
-			if (cap.isAncient()) {
-				NetworkHandler.INSTANCE.send(PacketDistributor.PLAYER.with(() -> (ServerPlayer) player),
+			if (cap.isAncient())
+				FragmentumNetworking.INSTANCE.sendTo(serverPlayer,
 						new AncientMessage(target.getId(), cap.isAncient()));
-			}
 		}
 	}
 
@@ -110,7 +109,7 @@ public class AncientEvents {
 					victim.blockPosition(),
 					ResourceLocationHelper.modLoc("entities/gilded_entity"),
 					victim.getRandom());
-			if (ModHelper.QUARK.hasMod()) {
+			if (ModHelper.QUARK.isLoaded()) {
 				stack = ColorRunesModule.withRune(stack, RuneColor.YELLOW);
 			}
 			dropGildedItem(stack, event.getEntity());
